@@ -1,10 +1,16 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: bluegreen
+  labels:
+    app: bgd
+  name: bgd
 spec:
   port:
-    targetPort: http
+    targetPort: 8080
   to:
     kind: Service
-    name: bluegreen
+    name: bgd
+    weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

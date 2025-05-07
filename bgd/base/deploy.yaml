@@ -1,21 +1,35 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: bluegreen
+  labels:
+    app: bgd
+  name: bgd
 spec:
-  replicas: 3
-  revisionHistoryLimit: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: bluegreen
+      app: bgd
+  strategy: {}
   template:
     metadata:
       labels:
-        app: bluegreen
+        app: bgd
     spec:
       containers:
-      - name: bluegreen
-        image: argoproj/rollouts-demo:blue
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
+      - image: quay.io/rhdevelopers/bgd:1.0.0
+        name: bgd
+        env:
+        - name: COLOR
+          value: "blue"
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
