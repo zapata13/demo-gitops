@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bluegreen
+spec:
+  replicas: 3
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: bluegreen
+  template:
+    metadata:
+      labels:
+        app: bluegreen
+    spec:
+      containers:
+      - name: bluegreen
+        image: argoproj/rollouts-demo:blue
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
